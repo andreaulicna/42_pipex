@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_error.c                                       :+:      :+:    :+:   */
+/*   free_error_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:17:18 by aulicna           #+#    #+#             */
-/*   Updated: 2023/11/07 03:24:21 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/11/07 07:26:19 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incl/pipex.h"
+#include "../incl/pipex_bonus.h"
 
 /**
  * @brief	This funtion prints an error message and returns and error code (1)
@@ -31,7 +31,7 @@ int	pipex_error(void)
  * @param	arr	the array of strings to free
 */
 
-static void	free_array(char **arr)
+void	free_array(char **arr)
 {
 	int	i;
 
@@ -43,20 +43,6 @@ static void	free_array(char **arr)
 	}
 	free(arr[i]);
 	free(arr);
-}
-
-/**
- * @brief	This functions calls the free_array function on all dynamically
- * allocated arrays in the program.
- * 
- * @param	pipex	pipex struct
-*/
-
-void	ft_free(t_pipex *pipex)
-{
-	free_array(pipex->paths);
-	free_array(pipex->cmd1);
-	free_array(pipex->cmd2);
 }
 
 /**
@@ -72,6 +58,21 @@ void	command_not_found(char **cmd, t_pipex *pipex)
 	ft_putstr_fd("Command not found: ", 2);
 	ft_putstr_fd(cmd[0], 2);
 	ft_putstr_fd("\n", 2);
-	ft_free(pipex);
+	free_array(pipex->paths);
+	free_array(pipex->cmd);
 	exit(1);
+}
+
+/**
+	* @brief	This function print an error message and usage instructions
+	when a wrong number of command-line arguments is received.
+*/
+
+void	no_valid_argument(void)
+{
+	ft_printf("Input error: Wrong number of arguments received.\n\n");
+	ft_printf("Correct usage:\n");
+	ft_printf("./pipex_bonus infile cmd1 cmd2 cmd3 ... cmdn outfile\n");
+	ft_printf("./pipex_bonus here_doc LIMITER cmd cmd1 outfile\n");
+	exit(0);
 }

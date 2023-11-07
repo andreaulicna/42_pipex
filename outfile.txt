@@ -1,1 +1,12 @@
-13
+Makefile
+README.md
+b_infile.txt
+b_outfile.txt
+incl
+infile.txt
+libftprintf
+outfile.txt
+pipex_bonus
+pipex_tester_42
+src
+src_bonus
