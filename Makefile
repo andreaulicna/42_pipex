@@ -6,14 +6,16 @@
 #    By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 13:27:38 by aulicna           #+#    #+#              #
-#    Updated: 2023/11/06 23:35:16 by aulicna          ###   ########.fr        #
+#    Updated: 2023/11/07 03:21:46 by aulicna          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 NAME_B = pipex_bonus
 
-SRC = src/main.c
+SRC = src/main.c \
+						src/command.c \
+						src/free_error.c
 SRC_B = src_bonus/main_bonus.c
 
 OBJ = $(SRC:.c=.o)

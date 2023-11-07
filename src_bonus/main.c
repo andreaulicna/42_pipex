@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2023/11/07 03:36:08 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/11/07 03:30:50 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,9 @@ int	main(int argc, char **argv, char *env[])
 	{
 		ft_printf("Input error: Wrong number of arguments received.\n\n");
 		ft_printf("Correct usage: ./pipex infile cmd1 cmd2 outfile\n");
+	//	ft_printf("Correct usage:\n");
+	//	ft_printf("./pipex_bonus infile cmd1 cmd2 cmd3 ... cmdn outfile\n");
+	//	ft_printf("./pipex_bonus here_doc LIMITER cmd cmd1 outfile\n");
 		exit(0);
 	}
 	process_input(&pipex, argv, env);
