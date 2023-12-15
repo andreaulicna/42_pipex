@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2023/11/07 07:45:20 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/15 15:48:31 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ static void	process_input_basic(t_pipex *pipex, int argc, char **argv)
 	dup2(pipex->infile, STDIN_FILENO);
 	close(pipex->pipe[0]);
 	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC
-			| __O_CLOEXEC, 0777);
+			| __O_CLOEXEC, 0664);
 	if (pipex->outfile == -1)
 		pipex_error();
 }

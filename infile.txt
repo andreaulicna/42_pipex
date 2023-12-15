@@ -1,6 +1,5 @@
-Ahoj
 Hello World!
-42
-Tatata
-ta
-t
+Hello World!
+Hello World!
+Hello World!
+Hello World!

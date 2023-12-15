@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:17:18 by aulicna           #+#    #+#             */
-/*   Updated: 2023/11/07 04:46:11 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/15 16:06:10 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,10 @@ void	ft_free(t_pipex *pipex)
 
 void	command_not_found(char **cmd, t_pipex *pipex)
 {
-	ft_putstr_fd("Command not found: ", 2);
+	ft_putstr_fd("pipex: ", 2);
 	ft_putstr_fd(cmd[0], 2);
+	ft_putstr_fd(": command not found", 2);
 	ft_putstr_fd("\n", 2);
 	ft_free(pipex);
-	exit(1);
+	exit(127);
 }

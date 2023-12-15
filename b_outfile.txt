@@ -1,11 +1,1 @@
-Makefile
-README.md
-b_infile.txt
-b_outfile.txt
-incl
-infile.txt
-libftprintf
-outfile.txt
-pipex_bonus
-src
-src_bonus
+70

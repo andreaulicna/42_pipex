@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2023/11/07 03:36:08 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/15 16:23:00 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static void	child_process(t_pipex *pipex, char **argv, char *env[])
 static void	parent_process(t_pipex *pipex, char **argv, char *env[])
 {
 	pipex->outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC
-			| __O_CLOEXEC, 0777);
+			| __O_CLOEXEC, 0664);
 	if (pipex->outfile == -1)
 		pipex_error();
 	dup2(pipex->pipe[0], STDIN_FILENO);
@@ -130,8 +130,8 @@ static int	pipex_handler(t_pipex *pipex, char **argv, char *env[])
 		pipex_error();
 	if (pipex->pid == 0)
 		child_process(pipex, argv, env);
-	waitpid(pipex->pid, NULL, 0);
 	parent_process(pipex, argv, env);
+	waitpid(pipex->pid, NULL, 0);
 	return (0);
 }
 
@@ -173,8 +173,8 @@ int	main(int argc, char **argv, char *env[])
 
 	if (argc != 5)
 	{
-		ft_printf("Input error: Wrong number of arguments received.\n\n");
-		ft_printf("Correct usage: ./pipex infile cmd1 cmd2 outfile\n");
+		ft_putstr_fd("Input error: Wrong number of arguments received.\n\n", 2);
+		ft_putstr_fd("Correct usage: ./pipex infile cmd1 cmd2 outfile\n", 2);
 		exit(0);
 	}
 	process_input(&pipex, argv, env);

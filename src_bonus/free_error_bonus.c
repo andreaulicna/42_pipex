@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:17:18 by aulicna           #+#    #+#             */
-/*   Updated: 2023/11/07 07:26:19 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/15 17:09:32 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,13 @@ void	free_array(char **arr)
 
 void	command_not_found(char **cmd, t_pipex *pipex)
 {
-	ft_putstr_fd("Command not found: ", 2);
+	ft_putstr_fd("pipex: ", 2);
 	ft_putstr_fd(cmd[0], 2);
+	ft_putstr_fd(": command not found", 2);
 	ft_putstr_fd("\n", 2);
 	free_array(pipex->paths);
 	free_array(pipex->cmd);
-	exit(1);
+	exit(127);
 }
 
 /**
@@ -70,9 +71,13 @@ void	command_not_found(char **cmd, t_pipex *pipex)
 
 void	no_valid_argument(void)
 {
-	ft_printf("Input error: Wrong number of arguments received.\n\n");
-	ft_printf("Correct usage:\n");
-	ft_printf("./pipex_bonus infile cmd1 cmd2 cmd3 ... cmdn outfile\n");
-	ft_printf("./pipex_bonus here_doc LIMITER cmd cmd1 outfile\n");
+	ft_putstr_fd("Input error: Wrong number of arguments received.\n\n", 2);
+	ft_putstr_fd("Correct usage:\n", 2);
+	ft_putstr_fd("./pipex_bonus infile cmd1 cmd2 cmd3 ... cmdn outfile\n", 2);
+	ft_putstr_fd("./pipex_bonus here_doc LIMITER cmd cmd1 outfile\n", 2);
+//	ft_printf("Input error: Wrong number of arguments received.\n\n");
+//	ft_printf("Correct usage:\n");
+//	ft_printf("./pipex_bonus infile cmd1 cmd2 cmd3 ... cmdn outfile\n");
+//	ft_printf("./pipex_bonus here_doc LIMITER cmd cmd1 outfile\n");
 	exit(0);
 }

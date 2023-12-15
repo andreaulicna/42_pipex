@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:48:32 by aulicna           #+#    #+#             */
-/*   Updated: 2023/11/07 07:42:14 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/15 13:00:32 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@
 # include <stdlib.h>
 
 /**
-	* cmd						one cmd input at a time
+	* cmd		one cmd input at a time
 	* env_path	paths to command read as one string
-	*	paths				all the paths returned from ft_split(env_path)
+	* paths		all the paths returned from ft_split(env_path)
 */
-
 typedef struct s_pipex
 {
 	int		pipe[2];

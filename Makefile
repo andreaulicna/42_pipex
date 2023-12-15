@@ -6,26 +6,27 @@
 #    By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 13:27:38 by aulicna           #+#    #+#              #
-#    Updated: 2023/11/07 06:48:32 by aulicna          ###   ########.fr        #
+#    Updated: 2023/12/15 17:08:31 by aulicna          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 NAME_B = pipex_bonus
 
-SRC = src/main.c \
-						src/command.c \
-						src/free_error.c
+SRC = 	src/main.c \
+		src/command.c \
+		src/free_error.c
+
 SRC_B = src_bonus/main_bonus.c \
-						src_bonus/command_bonus.c \
-						src_bonus/free_error_bonus.c \
-						src_bonus/input_bonus.c
+		src_bonus/command_bonus.c \
+		src_bonus/free_error_bonus.c \
+		src_bonus/input_bonus.c
 
 OBJ = $(SRC:.c=.o)
 OBJ_B = $(SRC_B:.c=.o)
 
 HEADER = incl/pipex.h
-HEADER_B = incl/pipex.h
+HEADER_B = incl/pipex_bonus.h
 
 LIBFTPRINTF = libftprintf
 LIBFT = libftprintf/libft
