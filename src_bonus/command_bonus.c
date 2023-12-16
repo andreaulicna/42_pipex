@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:16:20 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/15 16:28:12 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/16 14:09:04 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*get_command_full(char **paths, char *cmd)
 /**
  * @brief	This function uses an array of paths, a command to execute, and 
  * the environment information and attempts to execute the command. If
-	* the execution fails, it calls command_not_found function to handle the error.
+ * the execution fails, it calls command_not_found function to handle the error.
  * 
  * @param	pipex	pipex struct
  * @param	cmd		command to execute
