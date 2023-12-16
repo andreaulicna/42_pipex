@@ -6,23 +6,25 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:17:18 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/15 16:06:10 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/16 01:12:50 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/pipex.h"
 
 /**
- * @brief	This funtion prints an error message and returns and error code (1)
- * when an error is encountered. It uses the perror() function that produces
- * a message on standard error describing the last error encountered (the value
- * of errno).
+ * @brief	This function prints an error message and returns and exits
+ * the program with exit code (1) when an error is encountered. It uses
+ * the perror() function that produces a message on standard error describing
+ * the last error encountered (the value of errno).
+ * 
+ * @param	pipex	pipex struct that needs to be freed before exit
 */
-
-int	pipex_error(void)
+int	pipex_error(t_pipex *pipex)
 {
-	perror("Encoutered error: ");
-	return (1);
+	ft_free(pipex);
+	perror("pipex: input");
+	exit (1);
 }
 
 /**
@@ -30,7 +32,6 @@ int	pipex_error(void)
  * 
  * @param	arr	the array of strings to free
 */
-
 static void	free_array(char **arr)
 {
 	int	i;
@@ -51,12 +52,14 @@ static void	free_array(char **arr)
  * 
  * @param	pipex	pipex struct
 */
-
 void	ft_free(t_pipex *pipex)
 {
-	free_array(pipex->paths);
-	free_array(pipex->cmd1);
-	free_array(pipex->cmd2);
+	if (pipex->paths)
+		free_array(pipex->paths);
+	if (pipex->cmd1)
+		free_array(pipex->cmd1);
+	if (pipex->cmd2)
+		free_array(pipex->cmd2);
 }
 
 /**
@@ -66,13 +69,14 @@ void	ft_free(t_pipex *pipex)
  * @param	cmd		command that the program attempted to execute
  * @param	pipex	pipex struct
 */
-
 void	command_not_found(char **cmd, t_pipex *pipex)
 {
-	ft_putstr_fd("pipex: ", 2);
 	ft_putstr_fd(cmd[0], 2);
 	ft_putstr_fd(": command not found", 2);
 	ft_putstr_fd("\n", 2);
-	ft_free(pipex);
-	exit(127);
+	if (pipex->pid != 1)
+	{
+		ft_free(pipex);
+		exit(127);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/15 15:48:31 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/16 01:03:17 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,12 @@
  * @param	pipex	pipex struct
  * @param	limiter	string that specifies the delimiter for the here_doc
 */
-
 static void	process_here_doc(t_pipex *pipex, char *limiter)
 {
 	static char	*line;
 
 	if (pipe(pipex->pipe) == -1)
-		pipex_error();
+		pipex_error(pipex);
 	pipex->pid = fork();
 	if (pipex->pid == 0)
 	{
@@ -78,13 +77,13 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
 	else
 		process_here_doc(pipex, argv[2]);
 	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND
-			| __O_CLOEXEC, 0777);
+			| __O_CLOEXEC, 0664);
 	if (pipex->outfile == -1)
-		pipex_error();
+		pipex_error(pipex);
 }
 
 /**
- * @brief	This function process the input arguments when the first argument
+ * @brief	This function proceses the input arguments when the first argument
  * is not "here_doc".
  * 
  * The infile is opened in read-only setup (O_RDONLY) and will be automatically
@@ -99,8 +98,8 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
  * Then the file descriptor for the read end of the pipe is closed since it's
  * not used.
  * 
- * The outfile is opened for writing (O_WRONLY) and truncated to a lenght
- * of 0 (O_TRUNC). If the outfile doesn't exists, it's created (O_CREAT). 
+ * The outfile is opened for writing (O_WRONLY) and truncated to a length
+ * of 0 (O_TRUNC). If the outfile doesn't exist, it's created (O_CREAT). 
  * It'll also be automatically closed when a new program is executed using 
  * execve (__O_CLOEXEC). The file permissions are set to read, write, and 
  * execute for the owner, and no permissions for others (0777).
@@ -109,20 +108,19 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
  * @param	argc
  * @param	argv
 */
-
 static void	process_input_basic(t_pipex *pipex, int argc, char **argv)
 {
 	if (pipe(pipex->pipe) == -1)
-		pipex_error();
+		pipex_error(pipex);
 	pipex->infile = open(argv[1], O_RDONLY | __O_CLOEXEC, 0777);
 	if (pipex->infile == -1)
-		pipex_error();
+		pipex_error(pipex);
 	dup2(pipex->infile, STDIN_FILENO);
 	close(pipex->pipe[0]);
 	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC
 			| __O_CLOEXEC, 0664);
 	if (pipex->outfile == -1)
-		pipex_error();
+		pipex_error(pipex);
 }
 
 /**
@@ -137,7 +135,6 @@ static void	process_input_basic(t_pipex *pipex, int argc, char **argv)
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
 int	process_input(t_pipex *pipex, int argc, char **argv, char *env[])
 {
 	if (!ft_strncmp(argv[1], "here_doc", 8))

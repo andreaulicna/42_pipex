@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/15 16:23:00 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/16 01:31:39 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@
  * from the infile and send its output to the pipe. It then executes
  * the specified command, ensuring that its input and output are correctly 
  * set up for the pipeline.
- * 
- * The infile is opened in read-only setup (O_RDONLY) and will be automatically
- * closed when a new program is executed using execve (__O_CLOEXEC). The file
- * permissions are set to read, write, and execute for the owner, and no 
- * permissions for others (0777).
  * 
  * Then the file descriptor of the write end of the pipe (pipex->pipe[1]) is 
  * duplicated into the standard output file descriptor (STDOUT_FILENO). This
@@ -47,12 +42,8 @@
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
-static void	child_process(t_pipex *pipex, char **argv, char *env[])
+static void	child_process(t_pipex *pipex, char *env[])
 {
-	pipex->infile = open(argv[1], O_RDONLY | __O_CLOEXEC, 0777);
-	if (pipex->infile == -1)
-		pipex_error();
 	dup2(pipex->pipe[1], STDOUT_FILENO);
 	close(pipex->pipe[1]);
 	dup2(pipex->infile, STDIN_FILENO);
@@ -66,12 +57,6 @@ static void	child_process(t_pipex *pipex, char **argv, char *env[])
  * the parent process to read from the pipe and send its output to the outfile. 
  * It then executes the specified command, ensuring that its input and output 
  * are correctly set up for the pipeline. 
- * 
- * The outfile is opened for writing (O_WRONLY) and truncated to a lenght
- * of 0 (O_TRUNC). If the outfile doesn't exists, it's created (O_CREAT). 
- * It'll also be automatically closed when a new program is executed using 
- * execve (__O_CLOEXEC). The file permissions are set to read, write, and 
- * execute for the owner, and no permissions for others (0777).
  * 
  * Then the file descriptor of the read end of the pipe (pipex->pipe[0]) is 
  * duplicated to standard input (STDIN_FILENO), so that the second command can
@@ -94,13 +79,8 @@ static void	child_process(t_pipex *pipex, char **argv, char *env[])
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
-static void	parent_process(t_pipex *pipex, char **argv, char *env[])
+static void	parent_process(t_pipex *pipex, char *env[])
 {
-	pipex->outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC
-			| __O_CLOEXEC, 0664);
-	if (pipex->outfile == -1)
-		pipex_error();
 	dup2(pipex->pipe[0], STDIN_FILENO);
 	close(pipex->pipe[0]);
 	dup2(pipex->outfile, STDOUT_FILENO);
@@ -120,38 +100,31 @@ static void	parent_process(t_pipex *pipex, char **argv, char *env[])
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
-static int	pipex_handler(t_pipex *pipex, char **argv, char *env[])
+static int	pipex_handler(t_pipex *pipex, char *env[])
 {
 	if (pipe(pipex->pipe) == -1)
-		pipex_error();
+		pipex_error(pipex);
 	pipex->pid = fork();
 	if (pipex->pid == -1)
-		pipex_error();
+		pipex_error(pipex);
 	if (pipex->pid == 0)
-		child_process(pipex, argv, env);
-	parent_process(pipex, argv, env);
+		child_process(pipex, env);
 	waitpid(pipex->pid, NULL, 0);
+	parent_process(pipex, env);
 	return (0);
 }
 
 /**
- * @brief	This function parses the command-line arguments and environment
- * variables to initialize data needed for the program execution.
+ * @brief	Initializes variables in the pipex struct that will be dynamically
+ * allocated and hence checked for whether or not they exist when freeing.
  * 
  * @param	pipex	pipex struct
- * @param	argv
- * @param	env		environment (global) variables that can be accessed by 
- * 					a program to obtain information about system's environment,
- * 					user, and configuration
 */
-
-static void	process_input(t_pipex *pipex, char **argv, char *env[])
+static void	init_pipex(t_pipex *pipex)
 {
-	pipex->cmd1 = ft_split(argv[2], ' ');
-	pipex->cmd2 = ft_split(argv[3], ' ');
-	pipex->env_path = get_path(env);
-	pipex->paths = ft_split(pipex->env_path, ':');
+	pipex->cmd1 = NULL;
+	pipex->cmd2 = NULL;
+	pipex->paths = NULL;
 }
 
 /**
@@ -166,7 +139,6 @@ static void	process_input(t_pipex *pipex, char **argv, char *env[])
  * 				to obtain information about system's environment, user,
  * 				and configuration
 */
-
 int	main(int argc, char **argv, char *env[])
 {
 	t_pipex	pipex;
@@ -177,8 +149,9 @@ int	main(int argc, char **argv, char *env[])
 		ft_putstr_fd("Correct usage: ./pipex infile cmd1 cmd2 outfile\n", 2);
 		exit(0);
 	}
+	init_pipex(&pipex);
 	process_input(&pipex, argv, env);
-	pipex_handler(&pipex, argv, env);
+	pipex_handler(&pipex, env);
 	ft_free(&pipex);
 	return (0);
 }

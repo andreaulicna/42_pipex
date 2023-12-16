@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/15 17:01:16 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/16 01:31:59 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
 static void	child_process(t_pipex *pipex, char *argv, char *env[])
 {
 	pipex->cmd = ft_split(argv, ' ');
@@ -44,11 +43,11 @@ static void	child_process(t_pipex *pipex, char *argv, char *env[])
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
 void	parent_process(t_pipex *pipex)
 {
 	dup2(pipex->pipe[0], STDIN_FILENO);
 	close(pipex->pipe[1]);
+	waitpid(pipex->pid, NULL, 0);
 }
 
 /**
@@ -61,19 +60,30 @@ void	parent_process(t_pipex *pipex)
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
 static int	pipex_handler(t_pipex *pipex, char *argv, char *env[])
 {
 	if (pipe(pipex->pipe) == -1)
-		pipex_error();
+		pipex_error(pipex);
 	pipex->pid = fork();
 	if (pipex->pid == -1)
-		pipex_error();
+		pipex_error(pipex);
 	if (pipex->pid == 0)
 		child_process(pipex, argv, env);
 	else
 		parent_process(pipex);
 	return (0);
+}
+
+/**
+ * @brief	Initializes variables in the pipex struct that will be dynamically
+ * allocated and hence checked for whether or not they exist when freeing.
+ * 
+ * @param	pipex	pipex struct
+*/
+static void	init_pipex(t_pipex *pipex)
+{
+	pipex->cmd = NULL;
+	pipex->paths = NULL;
 }
 
 /**
@@ -96,7 +106,6 @@ static int	pipex_handler(t_pipex *pipex, char *argv, char *env[])
  * 				to obtain information about system's environment, user,
  * 				and configuration
 */
-
 int	main(int argc, char **argv, char *env[])
 {
 	t_pipex	pipex;
@@ -104,13 +113,13 @@ int	main(int argc, char **argv, char *env[])
 
 	if (argc < 5)
 		no_valid_argument();
+	init_pipex(&pipex);
 	i = process_input(&pipex, argc, argv, env);
 	while (i < argc - 2)
 	{
 		pipex_handler(&pipex, argv[i], env);
 		i++;
 	}
-	waitpid(pipex.pid, NULL, 0);
 	pipex.cmd = ft_split(argv[argc - 2], ' ');
 	dup2(pipex.outfile, STDOUT_FILENO);
 	execute_command(&pipex, pipex.cmd, env);

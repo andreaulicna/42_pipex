@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:29:14 by aulicna           #+#    #+#             */
-/*   Updated: 2023/11/07 03:34:46 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/16 01:30:43 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ typedef struct s_pipex
 	char	**paths;
 }	t_pipex;
 
+// input.c
+void	process_input(t_pipex *pipex, char **argv, char *env[]);
+
 // free_error.c
-int		pipex_error(void);
+int		pipex_error(t_pipex *pipex);
 void	ft_free(t_pipex *pipex);
 void	command_not_found(char **cmd, t_pipex *pipex);
 

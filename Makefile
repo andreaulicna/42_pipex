@@ -6,7 +6,7 @@
 #    By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 13:27:38 by aulicna           #+#    #+#              #
-#    Updated: 2023/12/15 17:08:31 by aulicna          ###   ########.fr        #
+#    Updated: 2023/12/16 01:30:27 by aulicna          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME_B = pipex_bonus
 
 SRC = 	src/main.c \
 		src/command.c \
-		src/free_error.c
+		src/free_error.c \
+		src/input.c
 
 SRC_B = src_bonus/main_bonus.c \
 		src_bonus/command_bonus.c \

@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:48:32 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/15 13:00:32 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/16 00:56:00 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_pipex
 void	parent_process(t_pipex *pipex);
 
 // free_error_bonus.c
-int		pipex_error(void);
+int		pipex_error(t_pipex *pipex);
 void	free_array(char **arr);
 void	command_not_found(char **cmd, t_pipex *pipex);
 void	no_valid_argument(void);

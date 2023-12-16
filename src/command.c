@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:16:20 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/15 16:28:20 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/16 01:27:17 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
 char	*get_path(char **env)
 {
 	int	i;
@@ -37,7 +36,6 @@ char	*get_path(char **env)
  * the specified directories. If the command is found, the full path is returned.
  * Otherwise, it returns NULL.
 */
-
 static char	*get_command_full(char **paths, char *cmd)
 {
 	int		i;
@@ -69,7 +67,6 @@ static char	*get_command_full(char **paths, char *cmd)
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-
 void	execute_command(t_pipex *pipex, char **cmd, char *env[])
 {
 	char	*cmd_full;
