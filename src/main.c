@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/25 16:49:15 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 17:47:13 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,12 @@ static void	child_process(t_pipex *pipex, char **argv, char *env[])
  * the parent process to read from the pipe and send its output to the outfile. 
  * It then executes the specified command, ensuring that its input and output 
  * are correctly set up for the pipeline. 
+ * 
+ * The outfile is opened for writing (O_WRONLY) and truncated to a lenght
+ * of 0 (O_TRUNC). If the outfile doesn't exists, it's created (O_CREAT). 
+ * It'll also be automatically closed when a new program is executed using 
+ * execve (__O_CLOEXEC). The file permissions are set to read and write for
+ * the owner and read-only for others
  * 
  * Then the file descriptor of the read end of the pipe (pipex->pipe[0]) is 
  * duplicated to standard input (STDIN_FILENO), so that the second command can

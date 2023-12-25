@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 01:29:13 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/25 15:22:09 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 17:46:22 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,6 @@
  * closed when a new program is executed using execve (__O_CLOEXEC). The file
  * permissions are set to read, write, and execute for the owner, and no 
  * permissions for others (0777).
- * 
- * The outfile is opened for writing (O_WRONLY) and truncated to a lenght
- * of 0 (O_TRUNC). If the outfile doesn't exists, it's created (O_CREAT). 
- * It'll also be automatically closed when a new program is executed using 
- * execve (__O_CLOEXEC). The file permissions are set to read and write for
- * the owner and read-only for others
  * 
  * @param	pipex	pipex struct
  * @param	argv

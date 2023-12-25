@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/25 16:55:12 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 17:47:31 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,6 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
  * Then the file descriptor for the read end of the pipe is closed since it's
  * not used.
  * 
- * The outfile is opened for writing (O_WRONLY) and truncated to a length
- * of 0 (O_TRUNC). If the outfile doesn't exist, it's created (O_CREAT). 
- * It'll also be automatically closed when a new program is executed using 
- * execve (__O_CLOEXEC). The file permissions are set to read, write, and 
- * execute for the owner, and no permissions for others (0777).
- * 
  * @param	pipex	pipex struct
  * @param	argc
  * @param	argv
@@ -111,7 +105,10 @@ static void	process_input_basic(t_pipex *pipex, char **argv)
 		pipex_error(pipex, 0);
 	pipex->infile = open(argv[1], O_RDONLY | __O_CLOEXEC, 0777);
 	if (pipex->infile == -1)
+	{
 		pipex_error(pipex, 1);
+		return ;
+	}
 	dup2(pipex->infile, STDIN_FILENO);
 	close(pipex->pipe[0]);
 }
@@ -121,6 +118,12 @@ static void	process_input_basic(t_pipex *pipex, char **argv)
  * variables to initialize data needed for the program execution. It calls
  * helper functions (process_input_here doc or process_input_basis) based
  * on whether or not the first arugment is "here_doc".
+ * 
+ * The outfile is opened for writing (O_WRONLY) and truncated to a length
+ * of 0 (O_TRUNC). If the outfile doesn't exist, it's created (O_CREAT). 
+ * It'll also be automatically closed when a new program is executed using 
+ * execve (__O_CLOEXEC). The file permissions are set to read, write, and 
+ * execute for the owner, and no permissions for others (0777).
  * 
  * @param	pipex	pipex struct
  * @param	argv
@@ -140,6 +143,10 @@ int	process_input(t_pipex *pipex, int argc, char **argv, char *env[])
 		pipex->here_doc = 0;
 	pipex->env_path = get_path(env);
 	pipex->paths = ft_split(pipex->env_path, ':');
+	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND
+			| __O_CLOEXEC, 0664);
+	if (pipex->outfile == -1)
+		pipex_error(pipex, 2);
 	if (pipex->here_doc == 1)
 	{
 		process_input_here_doc(pipex, argc, argv);
@@ -150,9 +157,5 @@ int	process_input(t_pipex *pipex, int argc, char **argv, char *env[])
 		process_input_basic(pipex, argv);
 		offset = 2;
 	}
-	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND
-			| __O_CLOEXEC, 0664);
-	if (pipex->outfile == -1)
-		pipex_error(pipex, 2);
 	return (offset);
 }
