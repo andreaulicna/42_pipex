@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/16 01:31:59 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 16:49:55 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ void	parent_process(t_pipex *pipex)
 static int	pipex_handler(t_pipex *pipex, char *argv, char *env[])
 {
 	if (pipe(pipex->pipe) == -1)
-		pipex_error(pipex);
+		pipex_error(pipex, 0);
 	pipex->pid = fork();
 	if (pipex->pid == -1)
-		pipex_error(pipex);
+		pipex_error(pipex, 0);
 	if (pipex->pid == 0)
 		child_process(pipex, argv, env);
 	else

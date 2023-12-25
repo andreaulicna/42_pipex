@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/25 13:35:48 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 16:55:12 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	process_here_doc(t_pipex *pipex, char *limiter)
 	static char	*line;
 
 	if (pipe(pipex->pipe) == -1)
-		pipex_error(pipex);
+		pipex_error(pipex, 0);
 	pipex->pid = fork();
 	if (pipex->pid == 0)
 	{
@@ -77,10 +77,6 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
 		no_valid_argument();
 	else
 		process_here_doc(pipex, argv[2]);
-	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND
-			| __O_CLOEXEC, 0664);
-	if (pipex->outfile == -1)
-		pipex_error(pipex);
 }
 
 /**
@@ -109,19 +105,15 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
  * @param	argc
  * @param	argv
 */
-static void	process_input_basic(t_pipex *pipex, int argc, char **argv)
+static void	process_input_basic(t_pipex *pipex, char **argv)
 {
 	if (pipe(pipex->pipe) == -1)
-		pipex_error(pipex);
+		pipex_error(pipex, 0);
 	pipex->infile = open(argv[1], O_RDONLY | __O_CLOEXEC, 0777);
 	if (pipex->infile == -1)
-		pipex_error(pipex);
+		pipex_error(pipex, 1);
 	dup2(pipex->infile, STDIN_FILENO);
 	close(pipex->pipe[0]);
-	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC
-			| __O_CLOEXEC, 0664);
-	if (pipex->outfile == -1)
-		pipex_error(pipex);
 }
 
 /**
@@ -138,6 +130,10 @@ static void	process_input_basic(t_pipex *pipex, int argc, char **argv)
 */
 int	process_input(t_pipex *pipex, int argc, char **argv, char *env[])
 {
+	int	offset;
+
+	pipex->argv = argv;
+	pipex->argc = argc;
 	if (!ft_strncmp(argv[1], "here_doc", 8))
 		pipex->here_doc = 1;
 	else
@@ -147,11 +143,16 @@ int	process_input(t_pipex *pipex, int argc, char **argv, char *env[])
 	if (pipex->here_doc == 1)
 	{
 		process_input_here_doc(pipex, argc, argv);
-		return (3);
+		offset = 3;
 	}
 	else
 	{
-		process_input_basic(pipex, argc, argv);
-		return (2);
+		process_input_basic(pipex, argv);
+		offset = 2;
 	}
+	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND
+			| __O_CLOEXEC, 0664);
+	if (pipex->outfile == -1)
+		pipex_error(pipex, 2);
+	return (offset);
 }

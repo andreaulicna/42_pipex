@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:17:18 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/16 01:12:50 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 15:17:22 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,21 @@
  * 
  * @param	pipex	pipex struct that needs to be freed before exit
 */
-int	pipex_error(t_pipex *pipex)
+int	pipex_error(t_pipex *pipex, int code)
 {
+	if (code == 1)
+	{
+		ft_putstr_fd("pipex: ", 2);
+		perror(pipex->argv[1]);
+	}
+	else if (code == 2)
+	{
+		ft_putstr_fd("pipex: ", 2);
+		perror(pipex->argv[4]);
+	}
+	else
+		perror("pipex");
 	ft_free(pipex);
-	perror("pipex: input");
 	exit (1);
 }
 

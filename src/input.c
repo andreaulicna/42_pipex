@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 01:29:13 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/16 01:32:16 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 15:22:09 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,9 @@
 */
 void	process_input(t_pipex *pipex, char **argv, char *env[])
 {
+	pipex->argv = argv;
 	pipex->cmd1 = ft_split(argv[2], ' ');
 	pipex->cmd2 = ft_split(argv[3], ' ');
 	pipex->env_path = get_path(env);
 	pipex->paths = ft_split(pipex->env_path, ':');
-	pipex->infile = open(argv[1], O_RDONLY | __O_CLOEXEC, 0777);
-	if (pipex->infile == -1)
-		pipex_error(pipex);
-	pipex->outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC
-			| __O_CLOEXEC, 0664);
-	if (pipex->outfile == -1)
-		pipex_error(pipex);
 }

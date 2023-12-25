@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/16 01:31:39 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 16:49:15 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,11 @@
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-static void	child_process(t_pipex *pipex, char *env[])
+static void	child_process(t_pipex *pipex, char **argv, char *env[])
 {
+	pipex->infile = open(argv[1], O_RDONLY | __O_CLOEXEC, 0777);
+	if (pipex->infile == -1)
+		pipex_error(pipex, 1);
 	dup2(pipex->pipe[1], STDOUT_FILENO);
 	close(pipex->pipe[1]);
 	dup2(pipex->infile, STDIN_FILENO);
@@ -79,8 +82,12 @@ static void	child_process(t_pipex *pipex, char *env[])
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-static void	parent_process(t_pipex *pipex, char *env[])
+static void	parent_process(t_pipex *pipex, char **argv, char *env[])
 {
+	pipex->outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC
+			| __O_CLOEXEC, 0664);
+	if (pipex->outfile == -1)
+		pipex_error(pipex, 2);
 	dup2(pipex->pipe[0], STDIN_FILENO);
 	close(pipex->pipe[0]);
 	dup2(pipex->outfile, STDOUT_FILENO);
@@ -100,17 +107,17 @@ static void	parent_process(t_pipex *pipex, char *env[])
  * 					a program to obtain information about system's environment,
  * 					user, and configuration
 */
-static int	pipex_handler(t_pipex *pipex, char *env[])
+static int	pipex_handler(t_pipex *pipex, char **argv, char *env[])
 {
 	if (pipe(pipex->pipe) == -1)
-		pipex_error(pipex);
+		pipex_error(pipex, 0);
 	pipex->pid = fork();
 	if (pipex->pid == -1)
-		pipex_error(pipex);
+		pipex_error(pipex, 0);
 	if (pipex->pid == 0)
-		child_process(pipex, env);
+		child_process(pipex, argv, env);
 	waitpid(pipex->pid, NULL, 0);
-	parent_process(pipex, env);
+	parent_process(pipex, argv, env);
 	return (0);
 }
 
@@ -151,7 +158,7 @@ int	main(int argc, char **argv, char *env[])
 	}
 	init_pipex(&pipex);
 	process_input(&pipex, argv, env);
-	pipex_handler(&pipex, env);
+	pipex_handler(&pipex, argv, env);
 	ft_free(&pipex);
 	return (0);
 }
