@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/16 01:03:17 by aulicna          ###   ########.fr       */
+/*   Updated: 2023/12/25 13:35:48 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static void	process_here_doc(t_pipex *pipex, char *limiter)
 		line = get_next_line(0);
 		while (line)
 		{
-			if (!ft_strncmp(line, limiter, ft_strlen(limiter)))
+			if (!ft_strncmp(line, limiter, ft_strlen(limiter))
+				&& line[ft_strlen(limiter)] == '\n')
 				exit(0);
 			write(pipex->pipe[1], line, ft_strlen(line));
 			ft_putstr_fd("> ", 1);
