@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/25 17:39:37 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/01/29 15:30:24 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	parent_process(t_pipex *pipex)
 {
 	dup2(pipex->pipe[0], STDIN_FILENO);
 	close(pipex->pipe[1]);
-	waitpid(pipex->pid, NULL, 0);
+	waitpid(pipex->pid, NULL, -1);
 }
 
 /**
