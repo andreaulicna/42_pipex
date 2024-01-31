@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2024/01/30 21:35:59 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/01/31 11:19:20 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	main(int argc, char **argv, char *env[])
 	t_pipex	pipex;
 	int		i;
 
-	if (argc < 5)
+	if (argc < 4)
 		no_valid_argument();
 	init_pipex(&pipex);
 	i = process_input(&pipex, argc, argv, env);
