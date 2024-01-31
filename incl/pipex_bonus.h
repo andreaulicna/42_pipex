@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:48:32 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/25 15:34:40 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/01/31 14:09:28 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	parent_process(t_pipex *pipex);
 
 // free_error_bonus.c
 int		pipex_error(t_pipex *pipex, int code);
+void	free_pipex(t_pipex *pipex);
 void	free_array(char **arr);
 void	command_not_found(char **cmd, t_pipex *pipex);
 void	no_valid_argument(void);

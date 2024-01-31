@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2024/01/29 15:31:20 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/01/31 14:11:45 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,26 +31,23 @@ static void	process_here_doc(t_pipex *pipex, char *limiter)
 {
 	static char	*line;
 
-	if (pipe(pipex->pipe) == -1)
-		pipex_error(pipex, 0);
-	pipex->pid = fork();
-	if (pipex->pid == 0)
+	close(pipex->pipe[0]);
+	ft_putstr_fd("> ", 1);
+	line = get_next_line(0);
+	while (line)
 	{
-		close(pipex->pipe[0]);
-		ft_putstr_fd("> ", 1);
-		line = get_next_line(0);
-		while (line)
+		if (!ft_strncmp(line, limiter, ft_strlen(limiter))
+			&& line[ft_strlen(limiter)] == '\n')
 		{
-			if (!ft_strncmp(line, limiter, ft_strlen(limiter))
-				&& line[ft_strlen(limiter)] == '\n')
-				exit(0);
-			write(pipex->pipe[1], line, ft_strlen(line));
-			ft_putstr_fd("> ", 1);
-			line = get_next_line(0);
+			free(line);
+			free_pipex(pipex);
+			exit(0);
 		}
+		write(pipex->pipe[1], line, ft_strlen(line));
+		ft_putstr_fd("> ", 1);
+		free(line);
+		line = get_next_line(0);
 	}
-	else
-		parent_process(pipex);
 }
 
 /**
@@ -76,7 +73,15 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
 	if (argc < 6)
 		no_valid_argument();
 	else
-		process_here_doc(pipex, argv[2]);
+	{
+		if (pipe(pipex->pipe) == -1)
+			pipex_error(pipex, 0);
+		pipex->pid = fork();
+		if (pipex->pid == 0)
+			process_here_doc(pipex, argv[2]);
+		else
+			parent_process(pipex);
+	}
 }
 
 /**

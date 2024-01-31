@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 03:17:18 by aulicna           #+#    #+#             */
-/*   Updated: 2023/12/25 17:43:21 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/01/31 14:09:36 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,22 @@ int	pipex_error(t_pipex *pipex, int code)
 	}
 	else
 		perror("pipex");
+	free_pipex(pipex);
+	exit (1);
+}
+
+/**
+ * @brief	This function frees the dynamically allocated variables in pipex
+ * struct.
+ * 
+ * @param	pipex	pipex struct that needs to be freed before exit
+*/
+void	free_pipex(t_pipex *pipex)
+{
 	if (pipex->paths)
 		free_array(pipex->paths);
 	if (pipex->cmd)
 		free_array(pipex->cmd);
-	exit (1);
 }
 
 /**

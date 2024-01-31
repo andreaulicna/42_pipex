@@ -6,7 +6,7 @@
 #    By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 13:27:38 by aulicna           #+#    #+#              #
-#    Updated: 2023/12/18 14:35:44 by aulicna          ###   ########.fr        #
+#    Updated: 2024/01/31 11:33:05 by aulicna          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ HEADER_B = incl/pipex_bonus.h
 LIBFTPRINTF = libftprintf
 LIBFT = libftprintf/libft
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 
 GCC = gcc
 
@@ -68,5 +68,7 @@ fclean:
 	@make fclean -C $(LIBFTPRINTF)
 
 re: fclean all
+
+bonus_re: fclean bonus
 
 .PHONY: all bonus libs clean fclean re

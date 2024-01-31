@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:27:46 by aulicna           #+#    #+#             */
-/*   Updated: 2024/01/31 11:19:20 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/01/31 14:08:31 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,6 @@ int	main(int argc, char **argv, char *env[])
 	pipex.cmd = ft_split(argv[argc - 2], ' ');
 	dup2(pipex.outfile, STDOUT_FILENO);
 	execute_command(&pipex, pipex.cmd, env);
-	free_array(pipex.cmd);
-	free_array(pipex.paths);
+	free_pipex(&pipex);
 	return (0);
 }
