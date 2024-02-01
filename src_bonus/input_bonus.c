@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2024/01/31 14:11:45 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/02/01 11:40:03 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,10 @@ static void	process_here_doc(t_pipex *pipex, char *limiter)
 static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
 {
 	if (argc < 6)
+	{
+		free_pipex(pipex);
 		no_valid_argument();
+	}
 	else
 	{
 		if (pipe(pipex->pipe) == -1)
