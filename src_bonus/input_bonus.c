@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2024/02/01 11:40:03 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/02/06 17:11:44 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,10 @@ static void	process_here_doc(t_pipex *pipex, char *limiter)
 */
 static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
 {
+	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND
+			| __O_CLOEXEC, 0664);
+	if (pipex->outfile == -1)
+		pipex_error(pipex, 2);
 	if (argc < 6)
 	{
 		free_pipex(pipex);
@@ -107,8 +111,12 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
  * @param	argc
  * @param	argv
 */
-static void	process_input_basic(t_pipex *pipex, char **argv)
+static void	process_input_basic(t_pipex *pipex, int argc, char **argv)
 {
+	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC
+			| __O_CLOEXEC, 0664);
+	if (pipex->outfile == -1)
+		pipex_error(pipex, 2);
 	if (pipe(pipex->pipe) == -1)
 		pipex_error(pipex, 0);
 	pipex->infile = open(argv[1], O_RDONLY | __O_CLOEXEC, 0777);
@@ -151,10 +159,6 @@ int	process_input(t_pipex *pipex, int argc, char **argv, char *env[])
 		pipex->here_doc = 0;
 	pipex->env_path = get_path(env);
 	pipex->paths = ft_split(pipex->env_path, ':');
-	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC
-			| __O_CLOEXEC, 0664);
-	if (pipex->outfile == -1)
-		pipex_error(pipex, 2);
 	if (pipex->here_doc == 1)
 	{
 		process_input_here_doc(pipex, argc, argv);
@@ -162,7 +166,7 @@ int	process_input(t_pipex *pipex, int argc, char **argv, char *env[])
 	}
 	else
 	{
-		process_input_basic(pipex, argv);
+		process_input_basic(pipex, argc, argv);
 		offset = 2;
 	}
 	return (offset);
