@@ -6,7 +6,7 @@
 #    By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/04 12:42:49 by aulicna           #+#    #+#              #
-#    Updated: 2023/05/01 17:16:26 by aulicna          ###   ########.fr        #
+#    Updated: 2024/03/17 14:46:55 by aulicna          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ LIBFT = libft
 
 CFLAGS = -Wall -Werror -Wextra
 
-GCC = gcc
+CC = cc
 
 AR = ar rc
 
@@ -48,7 +48,7 @@ ${NAME}: $(OBJ)
 	$(AR) $(NAME) $(OBJ)
 
 .c.o:
-	$(GCC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	make clean -C $(LIBFT)

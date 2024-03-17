@@ -6,7 +6,7 @@
 /*   By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 06:48:19 by aulicna           #+#    #+#             */
-/*   Updated: 2024/02/06 17:11:44 by aulicna          ###   ########.fr       */
+/*   Updated: 2024/03/17 14:50:44 by aulicna          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,6 @@ static void	process_here_doc(t_pipex *pipex, char *limiter)
 */
 static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
 {
-	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND
-			| __O_CLOEXEC, 0664);
-	if (pipex->outfile == -1)
-		pipex_error(pipex, 2);
 	if (argc < 6)
 	{
 		free_pipex(pipex);
@@ -87,7 +83,15 @@ static void	process_input_here_doc(t_pipex *pipex, int argc, char **argv)
 		if (pipex->pid == 0)
 			process_here_doc(pipex, argv[2]);
 		else
-			parent_process(pipex);
+		{
+			waitpid(-1, NULL, 0);
+			pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND
+					| __O_CLOEXEC, 0664);
+			if (pipex->outfile == -1)
+				pipex_error(pipex, 2);
+			dup2(pipex->pipe[0], STDIN_FILENO);
+			close(pipex->pipe[1]);
+		}
 	}
 }
 

@@ -6,7 +6,7 @@
 #    By: aulicna <aulicna@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 13:27:38 by aulicna           #+#    #+#              #
-#    Updated: 2024/01/31 11:33:05 by aulicna          ###   ########.fr        #
+#    Updated: 2024/03/17 14:43:45 by aulicna          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ LIBFT = libftprintf/libft
 
 CFLAGS = -Wall -Werror -Wextra -g
 
-GCC = gcc
+CC = cc
 
 all: libs $(NAME)
 	@echo "pipex executable ready ✅"
@@ -43,13 +43,13 @@ bonus: libs $(NAME_B)
 	@echo "pipex_bonus executable ready ✅"
 
 .c.o:
-	$(GCC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ) $(HEADER)
-	$(GCC) $(CFLAGS) -L $(LIBFTPRINTF) -o $@ $^ -lftprintf
+	$(CC) $(CFLAGS) -L $(LIBFTPRINTF) -o $@ $^ -lftprintf
 
 $(NAME_B): $(OBJ_B) $(HEADER_B)
-	$(GCC) $(CFLAGS) -L $(LIBFTPRINTF) -o $@ $^ -lftprintf
+	$(CC) $(CFLAGS) -L $(LIBFTPRINTF) -o $@ $^ -lftprintf
 
 libs:
 	@make -C $(LIBFTPRINTF)
